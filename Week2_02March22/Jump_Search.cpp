@@ -5,27 +5,29 @@
 using namespace std;
 int cmp=0;
 int jumpsearch(int a[],int n,int key){
-	int l=0,h=n-1;
+	
 	int jmp=sqrt(n),strt=0;
 	while(true){
 		cmp++;
-		if(a[strt]==key){return strt;}
-		else if(a[strt]<key){
-			strt+=jmp;
-		}
-		else if(strt>n){
+		if(strt>n){
 			int prev=strt-jmp;
 			while(prev<n){
+				cmp++;
 				if(a[prev]==key)return prev;
 				else prev++;
 			}
 			return -1;
 		}
+		else if(a[strt]==key){return strt;}
+		else if(strt<n && a[strt]<key){
+			strt+=jmp;
+		}
 		else if(strt<n && a[strt]>key){
 			int prev=strt-jmp;
-			while(prev<n && prev<strt){
+			while(prev<n && prev<=strt){
 				if(a[prev]==key)return prev;
 				else prev++;
+				cmp++;
 			}
 			return -1;
 		}
@@ -33,13 +35,14 @@ int jumpsearch(int a[],int n,int key){
 	return -1;
 }
 void solve(){
+	
 	int n;cin>>n;
 	int a[n];
 	for(int &i:a)cin>>i;
 	int key;cin>>key;
 	
 	sort(a,a+n);
-	
+	cmp=0;
 	int ans=jumpsearch(a,n,key);
 	cout<<ans<<" "<<cmp<<endl;
 	// cout<<cmp<<endl;

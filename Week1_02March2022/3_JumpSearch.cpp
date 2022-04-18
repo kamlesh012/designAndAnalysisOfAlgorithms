@@ -1,67 +1,55 @@
+//Works Fine For all cases
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include <cmath>
-//Jump Search
 using namespace std;
-int comparisons=0;
+int cmp = 0;
+int jumpsearch(int a[], int n, int key) {
 
-int jump(int a[],int n,int key){
-
-    int steps=sqrt(n);
-    int present=0;comparisons=0;
-
-    while(present<n)
-    {
-        cout<<present<<" "<<a[present]<<endl;
-        if(a[present]==key){
-            comparisons++;
-            return present;
-        }
-        else if(a[present]<key){
-            comparisons++;
-            present+=steps;
-        }
-        else if(a[present]>key){
-
-            int start=present-steps;
-
-            while(start<n && start<present){
-                cout<<start<<" "<<a[start]<<endl;
-                comparisons++;
-                if(a[start]==key){
-                        return start;
-                }
-                start++;
-            }
-        if(start==present)return -1;
-        }
-    }
-    return -1;
+	int jmp = sqrt(n), strt = 0;
+	while (true) {
+		cmp++;
+		if (strt < n && a[strt] == key) {return strt;}
+		else if (strt < n && a[strt] < key) {
+			strt += jmp;
+		}
+		else {
+			int prev = strt - jmp;
+			while (prev < n && prev <= strt) {
+				if (a[prev] == key)return prev;
+				else prev++;
+				cmp++;
+			}
+			return -1;
+		}
+	}
+	return -1;
 }
 
-void solve(){
+void solve() {
 
-int n;
-cin>>n;
-int a[n];
-for(int i=0;i<n;i++)cin>>a[i];
+	int n; cin >> n;
+	int a[n];
+	for (int &i : a)cin >> i;
+	int key; cin >> key;
 
-int key;
-cin>>key;
+	sort(a, a + n);
+	cmp = 0;
+	int ans = jumpsearch(a, n, key);
+	if (ans == -1)cout << "Not Found" << endl;
+	else {
+		cout << "FOUND at index:" << ans << endl;
+		cout << "Total Comparisons Required are " << cmp << endl;
+	}
 
-bool ok=false;
-int ans=jump(a,n,key);
-if(ans==-1)cout<<"NOT PRESENT "<<comparisons<<endl;
-else cout<<"Present Found at"<<ans<<"in "<<comparisons<<" comparisons"<<endl;
 
 }
+int main() {
+	int t; cin >> t;
+	while (t--) {
+		solve();
+	}
 
-int main(){
-
-int t;cin>>t;
-while(t--){
-
-    solve();
-}
-
-return 0;
+	return 0;
 }
